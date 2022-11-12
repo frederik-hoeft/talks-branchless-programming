@@ -18,7 +18,7 @@ presentation:
 
 <!-- slide -->
 
-## Agenda
+## Agenda (TODO)
 
 - Intro (1 min)
 - What are branches? (2 min)
@@ -532,7 +532,7 @@ What if number = -3?
 - number + mask = -3 + (-1) = -4
 - -4 ^ mask = -4 ^ (-1)
 - xor all 1s inverts all bits
-- $\implies$ -4 ^ (-1) = ~(-4) = ~1 $\dots$ 100b = 0 $\dots$ 011b
+- $\implies$ -4 ^ (-1) = ~(-4) = ~1 $\dots$ 100b = 0 $\dots$ 011b = 3
 
 </td>
 </tr>
@@ -684,6 +684,7 @@ private static bool TryParseMpegHeader(void* pFrame)
     int versionIndex = ((int)mpegVersion & 0b01) ^ (((int)mpegVersion & 0b10) >> 1);
     // load the MPEG layer information from the header
     MpegLayer mpegLayer = (MpegLayer)((pHeaderBytes[1] & 0b0000_0110u) >> 1);
+	...
 ```
 
 <!-- slide -->
