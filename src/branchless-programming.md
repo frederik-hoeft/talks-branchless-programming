@@ -18,7 +18,7 @@ presentation:
 
 <!-- slide -->
 
-## Agenda (TODO)
+## Agenda (TODO: does not match content)
 
 - Intro (1 min)
 - What are branches? (2 min)
@@ -34,7 +34,7 @@ presentation:
 - Example 1: `max()` function (5 min)
 - Example 2: `hexlify()` / `unhexlify()`  (4 min)
 - Branchless is just the beginning (1 min)
-	- Example 2 + SIMD (+GPGPU? 😲).
+	- Example 2 + SIMD (+GPGPU?).
 - Pitfalls, Do's and Dont's (2 min)
 - Conclusion (2 min)
 
@@ -73,11 +73,9 @@ butDoThisEitherWay();
 </tr>
 </table>
 
-
-
 <!-- slide -->
 
-## Why should I care?
+## Cool... So what's wrong with it?
 
 ### An introductory example
 
@@ -144,7 +142,8 @@ butDoThisEitherWay();
 
 ### For real: <br> what _is_ "branchless programming"?
 
-- advanced optimization technique: _"making things faster"_
+- advanced optimization technique for low-level code
+  - _"making things faster"_
 - Eliminate branches in `if`, `switch` statements.
 	- *not* loops (`while`, `for`, ...) $\implies$ "loop unrolling"
 
