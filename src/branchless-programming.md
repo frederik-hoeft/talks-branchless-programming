@@ -87,9 +87,8 @@ public static T CountBitsSetTo1<T>(T v)
 
 ## What are branches?
 
-<table>
-<tr>
-<td>
+<div style="display: grid; grid-template-columns: 1fr 1fr; column-gap: 2rem">
+<div>
 
 ```csharp
 if (condition)
@@ -103,14 +102,13 @@ else
 butDoThisEitherWay();
 ```
 
-</td>
-<td>
+</div>
+<div>
 
 <img style="height: 20rem" src="./assets/branch.png"/>
 
-</td>
-</tr>
-</table>
+</div>
+</div>
 
 <!-- slide -->
 
