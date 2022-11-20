@@ -127,6 +127,8 @@ butDoThisEitherWay();
   </div>
 </div>
 
+<!--a house party with around 20 people. There are colored lights, alcoholic drinks and music is playing. Everyone seems to have a good time, digital art-->
+
 <!-- slide -->
 
 <div style="display: flex; align-items: center; justify-content: center;">
@@ -137,6 +139,8 @@ butDoThisEitherWay();
 	</div>
   </div>
 </div>
+
+<!--A house party with around 20 people. There are colored lights, music is playing. The guests are annoyed and seem to be waiting for someone. In the foreground a person is making a phone call. digital art -->
 
 <!-- slide -->
 
@@ -149,6 +153,8 @@ butDoThisEitherWay();
   </div>
 </div>
 
+<!--A house party with around 20 people. There are colored lights, music is playing. The guests in the background are eating pizza but seem to be annoyed. In the foreground someone is all by themselves eating pineapple pizza. digital art-->
+
 <!-- slide -->
 
 <div style="display: flex; align-items: center; justify-content: center;">
@@ -160,7 +166,7 @@ butDoThisEitherWay();
   </div>
 </div>
 
-<!--A house party with colored lights and around 20 people. The guests are standing shocked in front of a huge wall of pizza boxes. A rift through time and space itself opens up in the middle of the room. There are integrals and differential equations and complex mathematics in the air. digital art-->
+<!--A house party with colored lights and around 20 people. The guests are standing shocked in front of a huge wall of pizza boxes. A rift through time and space itself opens up in the middle of the room. There are integrals and differential equations and complex mathematics magically floating in the air. digital art-->
 
 <!-- slide -->
 
