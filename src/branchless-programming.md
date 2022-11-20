@@ -16,33 +16,72 @@ presentation:
 
 # Branchless Programming
 
+<div style="display: flex; justify-content: center; font-size: 1.5rem;">
+
+_"How to make your code faster and less readable."_
+
+</div>
+
+<div style="font-size: 1.75rem;">
+
+```csharp
+public static T CountBitsSetTo1<T>(T v) 
+{
+    v = v - ((v >> 1) & (T)~(T)0/3);                              // temp
+    v = (v & (T)~(T)0/15*3) + ((v >> 2) & (T)~(T)0/15*3);         // temp
+    v = (v + (v >> 4)) & (T)~(T)0/255*15;                         // temp
+    return (T)(v * ((T)~(T)0/255)) >> (sizeof(T) - 1) * CHAR_BIT; // count
+}
+```
+<div style="width: 100%; display: flex; justify-content: right;">
+<span style="font-size: 1rem; margin-right: 2rem;">example taken from "Bit Twiddling Hacks" by Sean Eron Anderson</span>
+</div>
+
+</div>
+
 <!-- slide -->
 
-## Agenda (TODO: does not match content)
+## Sooo... who is this guy?
 
-- Intro (1 min)
-- What are branches? (2 min)
-- Branches: why should I care?
-	- An everyday example (3 min)
-	- The technical aspect (5 min)
-- What branchless code can do for me (and what it can't) (3 min)
-- So how does it work?
-	- Basics
-		- Bits and Bytes (2 min)
-		- Two's complement (2 min)
-		- Binary arithmetic: shifting and masking (3 min)
-- Example 1: `max()` function (5 min)
-- Example 2: `hexlify()` / `unhexlify()`  (4 min)
-- Branchless is just the beginning (1 min)
-	- Example 2 + SIMD (+GPGPU?).
-- Pitfalls, Do's and Dont's (2 min)
-- Conclusion (2 min)
+<div style="display: grid; grid-template-columns: 1fr 1.5fr;">
+	<div style="display: flex; flex-direction: column; justify-content: left;">
+		<img style="border-radius: 50%; border: 4px solid rgba(27,31,36,0.15); width: 16rem;" src="./assets/github-my-avatar.png">
+		<code style="color: #57606a; font-size: 1.5rem">frederik-hoeft</code>
+		<p style="font-size: 1.25rem">.NET guy studying computer science.<br> Interested in low level stuff, cryptography <br>and cyber security.</p>
+		<figure style="display: flex; align-items: center; margin: 0; font-size: 1.25rem; height: 4rem">
+			<img src="./assets/github.webp" style="aspect-ratio: 1/1; height: 2.5rem;">
+			<figcaption style="margin-left: 0.5rem">frederik-hoeft</figcaption>
+		</figure>
+		<figure style="display: flex; align-items: center; margin: 0; font-size: 1.25rem; height: 4rem">
+			<img src="./assets/instagram.png" style="aspect-ratio: 1/1; height: 2rem">
+			<figcaption style="margin-left: 0.5rem">@frederik.hoeft</figcaption>
+		</figure>
+	</div>
+	<div style="margin-top: 20.75rem; font-size: 1.25rem">
+
+- 😐 thinks he's funny...
+- 👨‍🎓 5th semester CS student @FHDW Hannover
+- 💼 full-stack mobile / web dev @WKG Software GmbH
+- 💼 freelancing since 2020
+- 👨‍💻 since 2018
+
+	</div>
+</div>
 
 <!-- slide -->
 
-## Intro
+## Structure
 
-About me...about whatever I'm doing today -> TODO
+- What are branches and why should I care?
+	- An "everyday" example
+- Branchless programming
+	- The CPU, x86 assembly and pipelining
+	- Bits, bytes and binary arithmetic
+- Going branchless
+- Some benchmarks
+- Branchless is just the beginning
+- Pitfalls, Do's and Dont's
+- Questions
 
 <!-- slide -->
 
@@ -131,7 +170,7 @@ butDoThisEitherWay();
   <div style="display: grid; grid-template-rows: 40rem, auto; width: 40rem;">
     <img style="height: 40rem" src="./assets/DALL-E-part5.png"></img>
 	<div style="display: flex; justify-content: end;">
-      <span style="font-size: 1rem; margin-right: 2rem; font-style: italic;">"Consequences of branchless programming." by DALL·E (OpenAI)</span>
+      <span style="font-size: 1rem; margin-right: 2rem; font-style: italic;">"Consequences of (over-) using branchless programming." by DALL·E (OpenAI)</span>
 	</div>
   </div>
 </div>
@@ -688,7 +727,15 @@ private static bool TryParseMpegHeader(void* pFrame)
 
 <!-- slide -->
 
-### In conclusion...
+### Questions?
+
+<div style="font-size: 1.5rem">
+
+_... or a few moments of awkward silence. It's up to you_ 🤷‍♂️
+
+</div>
+
+<div style="font-size: 1.75rem">
 
 ```csharp
 // secured my job :)
@@ -713,3 +760,13 @@ internal static bool IsValidMp3Header(void* pFrame) =>
     ((((byte*)pFrame)[1] & 0x06) >> 1) ^ MpegLayer.Layer1) >> 31) & 2))) >> 31))) 
     == unchecked((int)TRUE);
 ```
+
+<div style="display: flex; justify-content: end;">
+<div style="font-size: 1rem; margin-right: 2rem;">
+
+_"Documentation? Just read the code. The code:_ ...⬆️ _"_
+
+</div>
+</div>
+
+</div>
