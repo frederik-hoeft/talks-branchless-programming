@@ -8,4 +8,4 @@ _2022-11-25 @ FHDW Hannover_
 
 --- 
 
-(c) 2022 by Frederik Höft. All rights reserved.
+Copyright (c) 2022 by Frederik Höft. All rights reserved.
