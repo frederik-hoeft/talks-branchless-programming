@@ -613,17 +613,18 @@ int Abs(int number)
 <td>
 
 ```csharp
-int AbsBranchless(int number) 
+int AbsBranchlessMul(int number) 
 {
     int mask = (number >> 31);
-    return (number + mask) ^ mask;
+    return number * (mask | 1);
 }
 ```
 
 ```csharp
-int BuiltInMathAbs(int number) 
+int AbsBranchlessXor(int number) 
 {
-    return Math.Abs(number);
+    int mask = (number >> 31);
+    return (number + mask) ^ mask;
 }
 ```
 
@@ -637,14 +638,14 @@ int BuiltInMathAbs(int number)
 
 <div style="font-size: 1.5rem">
 
-|         Method |      Mean |     Error |    StdDev | Ratio | RatioSD |
-|--------------- |----------:|----------:|----------:|------:|--------:|
-|            `Abs` | 18.110 us | 0.2077 us | 0.1943 us |  1.00 |    0.00 |
-|  `AbsBranchless` |  6.995 us | 0.1191 us | 0.1114 us |  0.39 |    0.01 |
-| `BuiltInMathAbs` | 20.578 us | 0.2992 us | 0.2652 us |  1.14 |    0.02 |
+|           Method |      Mean |     Error |    StdDev | Ratio |
+|----------------- |----------:|----------:|----------:|------:|
+|              `Abs` | 16.498 us | 0.0588 us | 0.0491 us |  1.00 |
+| `AbsBranchlessXor` |  6.044 us | 0.0152 us | 0.0127 us |  0.37 |
+| `AbsBranchlessMul` |  6.089 us | 0.0399 us | 0.0374 us |  0.37 |
 
-$\implies$ `AbsBranchless()` is ~2.5 times faster (and more stable) than `Abs()` with branches!
-_Also: C# / .NET 7's `System.Math.Abs()` seems to be pretty slow_
+$\implies$ The branchless versions are >2.5 times faster (and more stable) than `Abs()` with branches!
+_Also the XOR version seems to be faster_
 
 </div>
 
