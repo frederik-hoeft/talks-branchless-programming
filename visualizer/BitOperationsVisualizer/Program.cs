@@ -73,6 +73,7 @@ public class BitOperationsVisualizer
                 }
                 root = ExpressionParser.Parse(expression);
                 root.VisualizeSteps(0);
+                Console.WriteLine();
             }
             catch (KeyNotFoundException e)
             {
@@ -365,7 +366,7 @@ public abstract class BinaryOperator : IExpression
         Left.VisualizeSteps(depth + 1);
         ExpressionParser.PrintLineAtDepth(Operator, depth, ConsoleColor.Red);
         Right.VisualizeSteps(depth + 1);
-        ExpressionParser.PrintLineAtDepth(new string('-', 40), depth, ConsoleColor.White);
+        ExpressionParser.PrintLineAtDepth(new string('-', 51), depth, ConsoleColor.White);
         ExpressionParser.PrintBinaryStringColored(Evaluate(), depth);
     }
 
@@ -437,7 +438,7 @@ public abstract class ShiftOperator : BinaryOperator
             ExpressionParser.PrintLineAtDepth(Operator, depth, ConsoleColor.Red);
             Right.VisualizeSteps(depth + 1);
         }
-        ExpressionParser.PrintLineAtDepth(new string('-', 40), depth, ConsoleColor.White);
+        ExpressionParser.PrintLineAtDepth(new string('-', 51), depth, ConsoleColor.White);
         ExpressionParser.PrintBinaryStringColored(Evaluate(), depth);
     }
 }
@@ -472,7 +473,7 @@ public class NotOperator : IExpression
     {
         Expression.VisualizeSteps(depth + 1);
         ExpressionParser.PrintLineAtDepth("~", depth, ConsoleColor.Red);
-        ExpressionParser.PrintLineAtDepth(new string('-', 40), depth, ConsoleColor.White);
+        ExpressionParser.PrintLineAtDepth(new string('-', 51), depth, ConsoleColor.White);
         ExpressionParser.PrintBinaryStringColored(~Expression.Evaluate(), depth);
     }
 
@@ -494,7 +495,7 @@ public class NegateOperator : IExpression
         {
             Expression.VisualizeSteps(depth + 1);
             ExpressionParser.PrintLineAtDepth("-", depth, ConsoleColor.Red);
-            ExpressionParser.PrintLineAtDepth(new string('-', 40), depth, ConsoleColor.White);
+            ExpressionParser.PrintLineAtDepth(new string('-', 51), depth, ConsoleColor.White);
         }
         ExpressionParser.PrintBinaryStringColored(-Expression.Evaluate(), depth);
     }
@@ -521,7 +522,7 @@ public class VariableDefinition : IExpression
         if (Value == null)
         {
             Expression.VisualizeSteps(depth + 1);
-            ExpressionParser.PrintLineAtDepth(new string('-', 40), depth, ConsoleColor.White);
+            ExpressionParser.PrintLineAtDepth(new string('-', 51), depth, ConsoleColor.White);
             ExpressionParser.PrintBinaryStringColored(Evaluate(), depth, Name);
             Value = new Number(Expression.Evaluate());
         }
