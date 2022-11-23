@@ -1,7 +1,9 @@
 ﻿// a C# program to visualize 32 bit signed bit operations, like >>, &, |, ^, ~, etc. The program takes a the expression as a parameter and then visualizes step-by-step what happens in binary representation.
 // GPT-3 output (manually modified):
 
-public class BitOperationsVisualizer
+namespace BitOperationsVisualizer;
+
+public class Program
 {
     public static void Main(string[] args)
     {
@@ -20,7 +22,7 @@ public class BitOperationsVisualizer
             return;
         }
         bool interactive = false;
-        string expression = args[0];
+        string? expression = args[0];
         if (args[0].Equals("--tree", StringComparison.OrdinalIgnoreCase))
         {
             ExpressionParser.TreeMode = true;
@@ -31,14 +33,14 @@ public class BitOperationsVisualizer
             interactive = true;
             Console.Clear();
         }
-        IExpression root;
+        IExpression? root;
         while (interactive)
         {
             try
             {
                 Console.Write("> ");
                 expression = Console.ReadLine();
-                if (expression == null)
+                if (string.IsNullOrWhiteSpace(expression))
                 {
                     continue;
                 }
@@ -61,6 +63,16 @@ public class BitOperationsVisualizer
                     ExpressionParser.TreeMode = false;
                     continue;
                 }
+                else if (expression.Trim() == "brackets=on")
+                {
+                    ExpressionParser.BracketsMode = true;
+                    continue;
+                }
+                else if (expression.Trim() == "brackets=off")
+                {
+                    ExpressionParser.BracketsMode = false;
+                    continue;
+                }
                 else if (expression.Trim() == "help")
                 {
                     Console.WriteLine("Commands:");
@@ -68,20 +80,22 @@ public class BitOperationsVisualizer
                     Console.WriteLine("  exit - exit the program");
                     Console.WriteLine("  tree-mode=on - enable tree mode");
                     Console.WriteLine("  tree-mode=off - disable tree mode");
+                    Console.WriteLine("  brackets=on - show brackets in output");
+                    Console.WriteLine("  brackets=off - hide brackets in output");
                     Console.WriteLine("  help - show this help");
                     continue;
                 }
                 root = ExpressionParser.Parse(expression);
-                root.VisualizeSteps(0);
+                root!.VisualizeSteps(0);
                 Console.WriteLine();
             }
-            catch (KeyNotFoundException e)
+            catch (ParserException e)
             {
                 Console.WriteLine(e.Message);
             }
         }
-        root = ExpressionParser.Parse(expression);
-        root.VisualizeSteps(0);
+        root = ExpressionParser.Parse(expression!);
+        root?.VisualizeSteps(0);
     }
 }
 
@@ -101,18 +115,20 @@ public static class ExpressionParser
 
     public static bool TreeMode { get; set; } = false;
 
-    public static IExpression Parse(string expression)
+    public static bool BracketsMode { get; set; } = false;
+
+    public static IExpression? Parse(string expression)
     {
         int index = 0;
         return Parse(expression, ref index);
     }
 
-    public static IExpression Parse(string expression, ref int index)
+    public static IExpression? Parse(string expression, ref int index)
     {
         // replace all whitespace with nothing
         expression = expression.Replace(" ", "");
 
-        IExpression result = null;
+        IExpression? result = null;
 
         while (index < expression.Length)
         {
@@ -122,8 +138,12 @@ public static class ExpressionParser
         return result;
     }
 
-    public static IExpression ParseNext(string expression, IExpression left, ref int index)
+    public static IExpression ParseNext(string expression, IExpression? left, ref int index)
     {
+        if (index >= expression.Length)
+        {
+            throw new ParserException("Unexpected end of expression");
+        }
         char c = expression[index];
         if (char.IsLetter(c) && index == 0)
         {
@@ -132,7 +152,7 @@ public static class ExpressionParser
             {
                 index++;
             }
-            string name = expression.Substring(start, index - start);
+            string name = expression[start..index];
             if (index < expression.Length && expression[index] == '=')
             {
                 index++;
@@ -149,13 +169,13 @@ public static class ExpressionParser
         {
             if (left != null)
             {
-                throw new Exception("Unexpected '('");
+                throw new ParserException("Unexpected '('");
             }
 
-            int endIndex = expression.LastIndexOf(')');
+            int endIndex = FindClosingBracket(expression, index);
             if (endIndex == -1)
             {
-                throw new Exception("Missing ')'");
+                throw new ParserException("Missing ')'");
             }
             string innerExpression = expression.Substring(index + 1, endIndex - index - 1);
             IExpression bracketExpression = new Brackets(Parse(innerExpression));
@@ -170,8 +190,11 @@ public static class ExpressionParser
             {
                 endIndex++;
             }
-            string numberString = expression.Substring(index, endIndex - index);
-            int number = int.Parse(numberString);
+            string numberString = expression[index..endIndex];
+            if (!int.TryParse(numberString, out int number))
+            {
+                throw new ParserException($"Invalid 32 bit integer: {numberString}");
+            }
             index = endIndex;
             return new Number(number);
         }
@@ -183,9 +206,9 @@ public static class ExpressionParser
             {
                 endIndex++;
             }
-            string name = expression.Substring(index, endIndex - index);
+            string name = expression[index..endIndex];
             index = endIndex;
-            return _variables.SingleOrDefault(var => var.Name == name) ?? throw new KeyNotFoundException($"Variable '{name}' was undefined.");
+            return _variables.SingleOrDefault(var => var.Name == name) ?? throw new ParserException($"Variable '{name}' was undefined.");
         }
         // parse unary operators (~, -)
         else if (c == '~')
@@ -209,14 +232,14 @@ public static class ExpressionParser
         {
             if (left == null)
             {
-                throw new Exception("Unexpected '" + c + "'");
+                throw new ParserException("Unexpected '" + c + "'");
             }
             index++;
             if (c is '<' or '>')
             {
                 if (expression[index] != c)
                 {
-                    throw new Exception("Unexpected '" + c + "'");
+                    throw new ParserException("Unexpected '" + c + "'");
                 }
                 index++;
             }
@@ -231,26 +254,42 @@ public static class ExpressionParser
                 '-' => new SubtractOperator(left, right),
                 '<' => new ShiftLeftOperator(left, right),
                 '>' => new ShiftRightOperator(left, right),
+                _ => throw new ParserException("Unexpected '" + c + "'"),
             };
         }
         else
         {
-            throw new Exception("Unexpected '" + c + "'");
+            throw new ParserException("Unexpected '" + c + "'");
         }
+    }
+
+    private static int FindClosingBracket(string expression, int index)
+    {
+        int depth = 1;
+        while (index < expression.Length)
+        {
+            index++;
+            if (expression[index] == '(')
+            {
+                depth++;
+            }
+            else if (expression[index] == ')')
+            {
+                depth--;
+                if (depth == 0)
+                {
+                    return index;
+                }
+            }
+        }
+        return -1;
     }
 
     public static string ToTwosComplementBinaryString(int value)
     {
         string result = Convert.ToString(value, 2);
-        if (value < 0)
-        {
-            result = result.Substring(result.Length - 32);
-        }
-        else
-        {
-            result = result.PadLeft(32, '0');
-        }
-        return result.Substring(0, 8) + "_" + result.Substring(8, 8) + "_" + result.Substring(16, 8) + "_" + result.Substring(24, 8);
+        result = value < 0 ? result[^32..] : result.PadLeft(32, '0');
+        return $"{result[..8]}_{result.Substring(8, 8)}_{result.Substring(16, 8)}_{result.Substring(24, 8)}";
     }
 
     public static void PrintBinaryStringColored(int value, int depth, string? leftName = null)
@@ -317,37 +356,35 @@ public class Number : IExpression
         Value = value;
     }
 
-    public void VisualizeSteps(int depth)
-    {
-        ExpressionParser.PrintBinaryStringColored(Value, depth);
-    }
+    public void VisualizeSteps(int depth) => ExpressionParser.PrintBinaryStringColored(Value, depth);
 
-    public int Evaluate()
-    {
-        return Value;
-    }
+    public int Evaluate() => Value;
 }
 
 public class Brackets : IExpression
 {
     public IExpression Expression { get; }
 
-    public Brackets(IExpression expression)
+    public Brackets(IExpression? expression)
     {
-        Expression = expression;
+        Expression = expression ?? throw new ParserException("Unexpected end of expression");
     }
 
     public void VisualizeSteps(int depth)
     {
-        //ExpressionParser.PrintAtDepth("(", depth, ConsoleColor.Red);
-        Expression.VisualizeSteps(depth);
-        //ExpressionParser.PrintAtDepth(")", depth, ConsoleColor.Red);
+        if (ExpressionParser.BracketsMode)
+        {
+            ExpressionParser.PrintLineAtDepth("(", depth, ConsoleColor.DarkYellow);
+            Expression.VisualizeSteps(depth + 1);
+            ExpressionParser.PrintLineAtDepth(")", depth, ConsoleColor.DarkYellow);
+        }
+        else
+        {
+            Expression.VisualizeSteps(depth);
+        }
     }
 
-    public int Evaluate()
-    {
-        return Expression.Evaluate();
-    }
+    public int Evaluate() => Expression.Evaluate();
 }
 
 public abstract class BinaryOperator : IExpression
@@ -511,10 +548,10 @@ public class VariableDefinition : IExpression
 
     public IExpression Expression { get; }
 
-    public VariableDefinition(string name, IExpression expression)
+    public VariableDefinition(string name, IExpression? expression)
     {
         Name = name;
-        Expression = expression;
+        Expression = expression ?? throw new ParserException("Unexpected end of expression");
     }
 
     public void VisualizeSteps(int depth)
@@ -532,8 +569,10 @@ public class VariableDefinition : IExpression
         }
     }
 
-    public int Evaluate()
-    {
-        return Value?.Value ?? Expression.Evaluate();
-    }
+    public int Evaluate() => Value?.Value ?? Expression.Evaluate();
+}
+
+public class ParserException : Exception
+{
+    public ParserException(string message) : base(message) { }
 }
