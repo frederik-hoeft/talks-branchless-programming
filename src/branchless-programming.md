@@ -170,19 +170,6 @@ butDoThisEitherWay();
 
 <!-- slide -->
 
-<div style="display: flex; align-items: center; justify-content: center;">
-  <div style="display: grid; grid-template-rows: 40rem, auto; width: 40rem;">
-    <img style="height: 40rem" src="./assets/DALL-E-part5.png"></img>
-	<div style="display: flex; justify-content: end;">
-      <span style="font-size: 1rem; margin-right: 2rem; font-style: italic;">"Consequences of (over-) using branchless programming." by DALL·E (OpenAI)</span>
-	</div>
-  </div>
-</div>
-
-<!--A software engineer wearing a suit and a tie has found his peace living in a remote hut in the mountains. Surrounded by nature he walks into the woods never to be seen again. digital art-->
-
-<!-- slide -->
-
 ### For real: <br> what _is_ "branchless programming"?
 
 - advanced optimization technique for low-level code
