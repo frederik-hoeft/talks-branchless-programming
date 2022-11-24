@@ -775,3 +775,19 @@ _"Documentation? Just read the code. The code:_ ...⬆️ _"_
 </div>
 
 </div>
+
+<!-- slide -->
+
+### Slides available on GitHub
+
+<div style="display: flex; align-items: center; justify-content: center; height: 25rem">
+
+<img src="./assets/frame.svg"/>
+
+</div>
+
+https://github.com/frederik-hoeft/talks-branchless-programming
+
+<p style="font-size: 1.25rem; text-align: right;">
+kthxbye 👋
+</p>
