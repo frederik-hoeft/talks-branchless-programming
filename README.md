@@ -1,10 +1,6 @@
-# talks-branchless-programming
+# "Tech-Talk: Branchless Programming"
 
-## "Tech-Talk: Branchless Programming"
-
----
-
-_2022-11-25 @ FHDW Hannover_
+Slides, sources and material for my talk at _2022-11-25 @ FHDW Hannover_
 
 --- 
 
